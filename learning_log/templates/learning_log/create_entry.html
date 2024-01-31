@@ -1,0 +1,15 @@
+{% extends 'learning_log/base.html' %}
+
+{% block content %}
+
+<h1>Add new Entry</h1>
+
+<form action="{% url 'learning_log:entry.create' %}" method='post'>
+    {% csrf_token %}
+
+    {{form.as_div}}
+
+    <button type="submit">Add</button>
+</form>
+
+{% endblock content %}
