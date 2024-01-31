@@ -47,17 +47,19 @@ def create_topic(request):
 
 
 # Entry
-def create_entry(request):
+def create_entry(request, topic_id):
+    topic = Topic.objects.get(id=topic_id)
+
     if request.method != 'POST':
         form = EntryForm()
     else:
         form = EntryForm(request.POST)
-
         if (form.is_valid()):
-            form.save()
-            return redirect(to='learning_log:index')
+            topic.entry_set.create(text=form.data.get('text'))
 
-    return render(request, 'learning_log/create_entry.html', {'form': form})
+            return redirect(to='learning_log:topic.show', topic_id=topic.id)
+
+    return render(request, 'learning_log/create_entry.html', {'form': form, 'topic': topic})
 
 
 # Ping

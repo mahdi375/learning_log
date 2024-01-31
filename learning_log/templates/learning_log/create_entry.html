@@ -4,7 +4,7 @@
 
 <h1>Add new Entry</h1>
 
-<form action="{% url 'learning_log:entry.create' %}" method='post'>
+<form action="{% url 'learning_log:topic.entry.create' topic.id %}" method='post'>
     {% csrf_token %}
 
     {{form.as_div}}

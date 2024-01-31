@@ -4,6 +4,10 @@
 
 <h1>{{ topic.text }} Page </h1>
 
+<div>
+	<a href="{% url 'learning_log:topic.entry.create' topic.id %}">Add New Entry</a>
+</div>
+
 <h2>Entries</h2>
 
 {% for entry in entries %}
