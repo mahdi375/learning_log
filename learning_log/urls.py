@@ -19,5 +19,7 @@ urlpatterns = [
         name='topic.entry.create'
     ),
 
+    path('entries/<int:entry_id>/edit', view=views.edit_entry, name='entry.edit'),
+
     path('ping', view=views.ping, name='ping'),
 ]

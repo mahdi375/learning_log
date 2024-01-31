@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Topic
+from .models import Topic, Entry
 from django.http import JsonResponse
 from .forms import TopicForm, EntryForm
 
@@ -64,6 +64,25 @@ def create_entry(request, topic_id):
     return render(request, 'learning_log/create_entry.html', {'form': form, 'topic': topic})
 
 
+def edit_entry(request, entry_id):
+    entry = Entry.objects.get(id=entry_id)
+    topic = entry.topic
+
+    form = EntryForm(instance=entry)
+
+    if request.method == 'POST':
+        form = EntryForm(instance=entry, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect(to='learning_log:topic.show', topic_id=topic.id)
+    else:
+        form = EntryForm(instance=entry)
+
+    return render(request, 'learning_log/edit_entry.html', {'form': form, 'entry': entry})
+
 # Ping
+
+
 def ping(request):
     return JsonResponse({'ping': 'pong'})

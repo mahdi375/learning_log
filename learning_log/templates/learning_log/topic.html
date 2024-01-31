@@ -11,10 +11,11 @@
 <h2>Entries</h2>
 
 {% for entry in entries %}
-<li>
+<li>{{ entry.date_added|date:'M d, Y H:i' }}
     {{ entry.text|linebreaks }}
-    {{ entry.date_added|date:'M d, Y H:i' }}
+    <a href="{% url 'learning_log:entry.edit' entry.id %}">Edit</a>
 </li>
+<hr>
 {% empty %}
 <h3>There is no Entry!</h3>
 {% endfor %}
