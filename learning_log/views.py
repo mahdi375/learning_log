@@ -55,7 +55,9 @@ def create_entry(request, topic_id):
     else:
         form = EntryForm(request.POST)
         if (form.is_valid()):
-            topic.entry_set.create(text=form.data.get('text'))
+            entry = form.save(commit=False)
+            entry.topic = topic
+            entry.save()
 
             return redirect(to='learning_log:topic.show', topic_id=topic.id)
 
