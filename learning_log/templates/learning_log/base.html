@@ -2,6 +2,17 @@
 	<a href="{% url 'learning_log:index' %}">Home</a>
 	<a href="{% url 'learning_log:topic.index' %}">Topics</a>
 	<a href="{% url 'learning_log:ping' %}">Ping</a>
+
+	{% if user.is_authenticated %}
+		Hello, {{ user.username }}.
+		<form action="{% url 'accounts:logout' %}" method='post'>
+			{% csrf_token %}
+			<button name='submit'>Log out</button>
+		</form>
+	{% else %}
+		<a href="{% url 'accounts:login' %}">Log in</a> - <a href="{% url 'accounts:register' %}">Register</a>
+	{% endif %}
+	
 </p>
 
 {% block content %}

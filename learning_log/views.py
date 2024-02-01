@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Topic, Entry
 from django.http import JsonResponse
 from .forms import TopicForm, EntryForm
+from django.contrib.auth.decorators import login_required
 
 
 # Home
@@ -12,15 +13,20 @@ def index(request):
 
 
 # Topic
+@login_required
 def topics(request):
-    topics = Topic.objects.order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
     context = {'topics': topics}
 
     return render(request, 'learning_log/topics.html', context)
 
 
+@login_required
 def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
+
+    topic.check_topic_owner(request.user)
+
     entries = topic.entry_set.order_by('-date_added')
     context = {
         'topic': topic,
@@ -30,13 +36,17 @@ def topic(request, topic_id):
     return render(request, 'learning_log/topic.html', context)
 
 
+@login_required
 def create_topic(request):
     if request.method != 'POST':
         form = TopicForm()
     else:
         form = TopicForm(data=request.POST)
+
         if (form.is_valid()):
-            form.save()
+            topic = form.save(commit=False)
+            topic.owner = request.user
+            topic.save()
             return redirect(to='learning_log:topic.index')
 
     context = {
@@ -47,8 +57,11 @@ def create_topic(request):
 
 
 # Entry
+@login_required
 def create_entry(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
+
+    topic.check_topic_owner(request.user)
 
     if request.method != 'POST':
         form = EntryForm()
@@ -64,6 +77,7 @@ def create_entry(request, topic_id):
     return render(request, 'learning_log/create_entry.html', {'form': form, 'topic': topic})
 
 
+@login_required
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
