@@ -1,15 +1,18 @@
 {% extends 'learning_log/base.html' %}
 
+{% load django_bootstrap5 %}
+
 {% block content %}
 
-<h1>Endit Entry: {{ entry.id }}</h1>
+<h1 class="text-center">Endit Entry: {{ entry.id }}</h1>
 
-<form action="{% url 'learning_log:entry.edit' entry.id %}" method='post'>
-    {% csrf_token %}
-
-    {{form.as_div}}
-
-    <button type="submit">Edit</button>
-</form>
+<div class="text-center">
+    <form action="{% url 'learning_log:entry.edit' entry.id %}" method='post'>
+        {% csrf_token %}
+    
+        {% bootstrap_form form %}
+        {% bootstrap_button button_type="submit" content="Edit" %}
+    </form>
+</div>
 
 {% endblock content %}

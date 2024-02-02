@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     """The home page for Learning Log."""
 
-    return render(request, 'learning_log/index.html')
+    return render(request, 'learning_log/index.html', {'user': request.user})
 
 
 # Topic

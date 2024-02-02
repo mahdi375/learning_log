@@ -1,25 +1,19 @@
-{% extends "learning_log/base.html" %}
+{% extends 'learning_log/base.html' %}
+
+{% block page_header %}
+	<h1>Topics</h1>
+{% endblock page_header %}
 
 {% block content %}
+	<div class="list-group mb-4">
+		
+		{% for topic in topics %}
+			<a href="{% url 'learning_log:topic.show' topic.id %}" class="list-group-item list-group-item-action">{{ topic.text }}</a>
+		{% empty %}
+		<a class="list-group-item list-group-item-action disabled" aria-disabled="true">No topics have been added yet.</a>
+		{% endfor %}
 
-<h1>Topics Page</h1>
+	</div>
 
-<div>
-	<a href="{% url 'learning_log:topic.create' %}">Create New Topic</a>
-</div>
-
-<h2>Topics:</h2>
-
-{% for topic in topics %}
-
-	<li>
-		<a href="{% url 'learning_log:topic.show' topic.id %}"> {{ topic.text }} </a>
-	</li>
-
-{% empty %}
-
-<h3>There is no Topic </h3>
-
-{% endfor %}
-
+	<a href="{% url 'learning_log:topic.create' %}" class="btn btn-success" >Add a new topic</a>
 {% endblock content %}
